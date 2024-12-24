@@ -1,3 +1,3 @@
 import apiManager from './scripts/apiModule';
 
-console.log(apiManager().fetchWeather());
+console.log(apiManager().fetchWeather('abbottabad'));
