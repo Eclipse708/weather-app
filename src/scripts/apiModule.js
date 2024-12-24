@@ -1,7 +1,6 @@
 const apiManager = () => {
 
     const fetchWeather = async (location) => {
-        console.log('loc', location);
         const urlTest = 'http://api.weatherapi.com/v1/forecast.json?key=1986480656ec490d950204923202611&q=${your_location}';
         const url = 'http://api.weatherapi.com/v1/forecast.json?';
         const apiKey = 'key=1986480656ec490d950204923202611&q=';
@@ -21,16 +20,6 @@ const apiManager = () => {
             console.log('No matching location found');
             return 0;
         }
-
-        // const resJson = data.then(response => {
-        //     return response.json();
-        // });
-
-        // const temperature = resJson.then(response => {
-        //    return response.current.temp_c;
-        // });
-        
-        // return temperature;
     
     }
 
@@ -38,6 +27,7 @@ const apiManager = () => {
         try {
             const response = await processData.json();
             const data = {
+              location: response.location.name,
               currentTemp: response.current.temp_c,
               maxTemp: response.forecast.forecastday[0].day.maxtemp_c,
               minTemp: response.forecast.forecastday[0].day.mintemp_c,
@@ -47,7 +37,6 @@ const apiManager = () => {
               localTime: response.location.localtime,
             }
     
-            console.log(data);
             return data;
         } catch (e) {
             console.log(e);
