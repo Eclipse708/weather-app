@@ -6,52 +6,53 @@ const uiController = () => {
     const form = document.getElementById('loc-form');
     const error = document.getElementById('error');
     const inputs = document.querySelectorAll('input');
-
+    const locationName = document.createElement('h1');
+    const localTime = document.createElement('p');
+    const locationDiv = document.querySelector('.location');
+    const currentTemp = document.createElement('p');
+    const maxTemp = document.createElement('p');
+    const minTemp = document.createElement('p');
+    const temperatureDiv = document.querySelector('.temperature');
+    const precipitation = document.createElement('p');
+    const humidity = document.createElement('p');
+    const wind = document.createElement('p');
+    const extraInfoDiv = document.querySelector('.extra-info');
+    
 
     const render = (data) => {
 
         console.log('data', data);
-        const locationName = document.createElement('h1');
         locationName.id = 'location-name';
         locationName.textContent = data.location;
-        const localTime = document.createElement('p');
+        
         localTime.id = 'local-time';
         localTime.textContent = `Local Time: ${data.localTime}`;
 
-        const locationDiv = document.querySelector('.location');
         locationDiv.appendChild(locationName);
         locationDiv.appendChild(localTime);
 
-        const currentTemp = document.createElement('p');
         currentTemp.id = 'location-temperature';
         currentTemp.textContent = `Current Temp: ${data.currentTemp}`;
 
-        const maxTemp = document.createElement('p');
         maxTemp.id = 'max-temp';
         maxTemp.textContent = `Max Temp: ${data.maxTemp}`;
 
-        const minTemp = document.createElement('p');
         minTemp.id = 'min-temp';
         minTemp.textContent = `Min Temp: ${data.minTemp}`;
 
-        const temperatureDiv = document.querySelector('.temperature');
         temperatureDiv.appendChild(currentTemp);
         temperatureDiv.appendChild(maxTemp);
         temperatureDiv.appendChild(minTemp);
 
-        const precipitation = document.createElement('p');
         precipitation.id = 'precipitation';
         precipitation.textContent = `Precipitation: ${data.percipitation}%`;
 
-        const humidity = document.createElement('p');
         humidity.id = 'humidity';
         humidity.textContent = `Humidity: ${data.humidity}%`;
 
-        const wind = document.createElement('p');
         wind.id = 'wind';
         wind.textContent = `Wind Speed: ${data.wind}`;
 
-        const extraInfoDiv = document.querySelector('.extra-info');
         extraInfoDiv.appendChild(precipitation);
         extraInfoDiv.appendChild(humidity);
         extraInfoDiv.appendChild(wind);
