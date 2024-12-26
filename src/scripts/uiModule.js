@@ -1,69 +1,83 @@
 import apiManager from "./apiModule";
 
 const uiController = () => {
-    const locName = document.getElementById('location-name');
-    const locTemp = document.getElementById('location-temp');
+    const title = document.querySelector('.title-section');
     const form = document.getElementById('loc-form');
     const error = document.getElementById('error');
     const inputs = document.querySelectorAll('input');
     const locationName = document.createElement('h1');
-    const localTime = document.createElement('p');
-    const locationDiv = document.querySelector('.location');
+    const locationDescription = document.createElement('p');
     const currentTemp = document.createElement('p');
     const maxTemp = document.createElement('p');
     const minTemp = document.createElement('p');
-    const temperatureDiv = document.querySelector('.temperature');
+    const temperatureDiv = document.querySelector('.current-weather .temperature');
+    const forecast = document.querySelector('.upcoming-weather .forecast');
     const precipitation = document.createElement('p');
     const humidity = document.createElement('p');
-    const wind = document.createElement('p');
-    const extraInfoDiv = document.querySelector('.extra-info');
     
     const changeTempUnit = (temp) => {
       const tempInCelsius = Math.round((temp - 32) * 5/9);
       return tempInCelsius;
     }
 
-    const render = (data) => {
+    const renderDays = (days) => {
+      days.forEach((day, index) => {
+        if (index === 0) {
+          return;
+        }
 
-        console.log('data', data);
-        locationName.id = 'location-name';
-        locationName.textContent = data.location;
-        
-        localTime.id = 'local-time';
-        localTime.textContent = `Description: ${data.localTime}`;
+      //   const forecastDiv = document.querySelector('.upcoming-weather .forecast');
+      // forecastDiv.innerHTML = '';
+        console.log(index, day);
+        const forecastTemp = document.createElement('p');
+        const forecastTempInCelsius = changeTempUnit(day.temp);
+        forecastTemp.textContent = `Current temp: ${forecastTempInCelsius}°C`;
 
-        locationDiv.appendChild(locationName);
-        locationDiv.appendChild(localTime);
-
-        currentTemp.id = 'location-temperature';
-        const currentTempInCel = changeTempUnit(data.currentTemp);
-        currentTemp.textContent = `Current Temp: ${currentTempInCel}`;
-
-        maxTemp.id = 'max-temp';
-        const maxTempInCel = changeTempUnit(data.maxTemp);
-        maxTemp.textContent = `Max Temp: ${maxTempInCel}`;
-
-        minTemp.id = 'min-temp';
-        const minTempInCel = changeTempUnit(data.minTemp);
-        minTemp.textContent = `Min Temp: ${minTempInCel}`;
-
-        temperatureDiv.appendChild(currentTemp);
-        temperatureDiv.appendChild(maxTemp);
-        temperatureDiv.appendChild(minTemp);
-
-        precipitation.id = 'precipitation';
-        precipitation.textContent = `Precipitation: ${data.percipitation}%`;
-
-        humidity.id = 'humidity';
-        humidity.textContent = `Humidity: ${data.humidity}%`;
-
-        wind.id = 'wind';
-        wind.textContent = `Wind Speed: ${data.wind}`;
-
-        extraInfoDiv.appendChild(precipitation);
-        extraInfoDiv.appendChild(humidity);
-        extraInfoDiv.appendChild(wind);
+        forecast.appendChild(forecastTemp);
+      })
     }
+
+    const render = (data) => {
+      // console.log('data', data);
+  
+      locationName.id = 'location-name';
+      locationName.textContent = data.location;
+  
+      locationDescription.id = 'location-description'
+      locationDescription.textContent = `Description: ${data.description}`;
+
+      title.appendChild(locationName);
+      title.appendChild(locationDescription);
+  
+      temperatureDiv.innerHTML = '';
+  
+      currentTemp.id = 'location-temperature';
+      const currentTempInCel = changeTempUnit(data.currentTemp);
+      currentTemp.textContent = `Current Temp: ${currentTempInCel}°C`;
+  
+      maxTemp.id = 'max-temp';
+      const maxTempInCel = changeTempUnit(data.maxTemp);
+      maxTemp.textContent = `Max Temp: ${maxTempInCel}°C`;
+  
+      minTemp.id = 'min-temp';
+      const minTempInCel = changeTempUnit(data.minTemp);
+      minTemp.textContent = `Min Temp: ${minTempInCel}°C`;
+  
+      precipitation.textContent = `Precipitation: ${data.percipitation}%`;
+      humidity.textContent = `Humidity ${data.humidity}%`;
+
+      
+      temperatureDiv.appendChild(currentTemp);
+      temperatureDiv.appendChild(maxTemp);
+      temperatureDiv.appendChild(minTemp);
+      temperatureDiv.appendChild(precipitation);
+      temperatureDiv.appendChild(humidity);
+  
+      // renders 7 days forecast
+      renderDays(data.days);
+  
+  };
+  
 
     const errorValidation = (inputName) => {
         if (inputName.value.length === 0) {
@@ -103,7 +117,15 @@ const uiController = () => {
         });
       }
 
+    const preview = () => {
+      apiManager().fetchWeather('london')
+      .then(response => {
+        render(response);
+      });
+    }
+
     const init = () => {
+        preview();
         addLocationListener();
     }
 

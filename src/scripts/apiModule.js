@@ -30,27 +30,15 @@ const apiManager = () => {
             const response = await processData.json();
             // console.log(response);
             const data = {
-              location: response.address,
+              location: response.resolvedAddress,
               currentTemp: response.currentConditions.temp,
               maxTemp: response.days[0].tempmax,
               minTemp: response.days[0].tempmin,
               percipitation: response.currentConditions.precipprob,
               humidity: response.currentConditions.humidity,
-              wind: response.currentConditions.windspeed,
-              localTime: response.description,
+              description: response.description,
+              days: response.days,
             }
-
-            // const data = {
-            //     location: 1,
-            //     currentTemp: 1,
-            //     maxTemp: 1,
-            //     minTemp: 1,
-            //     percipitation: 1,
-            //     humidity: 1,
-            //     wind: 1,
-            //     localTime: 1,
-            //   }
-    
             return data;
         } catch (e) {
             console.log(e);

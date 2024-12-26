@@ -6,21 +6,30 @@
     <title>Weather App</title>
 </head>
 <body>
-    <div class="container">
-      <div class="weather-info">
-        <div class="location">
-        </div>
-        <div class="temperature">
-        </div>
-        <div class="extra-info">
-        </div>
-      </div>
-      
-      <form id="loc-form" class="location-form">
-        <input type="text" id="city" name="cName" placeholder="Enter city name" required>
-        <span id="error"></span>
-        <button type="submit">Submit</button>
-      </form>
+  <div class="navbar">
+    <form id="loc-form" class="location-form">
+      <input type="text" id="city" name="cName" placeholder="Enter city name" required>
+      <button type="submit">Submit</button>
+      <span id="error"></span>
+    </form>
+  </div>
+  
+  <div class="container">
+    <div class="title-section">
     </div>
+  
+    <div class="weather-cards">
+      <div class="card current-weather">
+        <h3>Current Weather</h3>
+        <div class="temperature"></div>
+      </div>
+  
+      <div class="card upcoming-weather">
+        <h3>7-Day Forecast</h3>
+        <div class="forecast"></div>
+      </div>
+    </div>
+  </div>
+
 </body>  
 </html>
