@@ -2,11 +2,13 @@ const apiManager = () => {
 
     const fetchWeather = async (location) => {
         const urlTest = 'http://api.weatherapi.com/v1/forecast.json?key=1986480656ec490d950204923202611&q=${your_location}';
-        const url = 'http://api.weatherapi.com/v1/forecast.json?';
-        const apiKey = 'key=1986480656ec490d950204923202611&q=';
+        // const url = 'http://api.weatherapi.com/v1/forecast.json?';
+        // const apiKey = 'key=1986480656ec490d950204923202611&q=';
+        const apiKey = '48DBL9Y9LJFJZJVTP54BCVDFA';
+        const url = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline'
 
         try {
-            const response = await fetch(`${url}${apiKey}${location}`,
+            const response = await fetch(`${url}/${location}?key=${apiKey}`,
                 { mode: 'cors' }
             );
 
@@ -26,16 +28,28 @@ const apiManager = () => {
     const processJson = async (processData) => {
         try {
             const response = await processData.json();
+            // console.log(response);
             const data = {
-              location: response.location.name,
-              currentTemp: response.current.temp_c,
-              maxTemp: response.forecast.forecastday[0].day.maxtemp_c,
-              minTemp: response.forecast.forecastday[0].day.mintemp_c,
-              percipitation: response.forecast.forecastday[0].day.daily_chance_of_rain,
-              humidity: response.current.humidity,
-              wind: response.current.wind_kph,
-              localTime: response.location.localtime,
+              location: response.address,
+              currentTemp: response.currentConditions.temp,
+              maxTemp: response.days[0].tempmax,
+              minTemp: response.days[0].tempmin,
+              percipitation: response.currentConditions.precipprob,
+              humidity: response.currentConditions.humidity,
+              wind: response.currentConditions.windspeed,
+              localTime: response.description,
             }
+
+            // const data = {
+            //     location: 1,
+            //     currentTemp: 1,
+            //     maxTemp: 1,
+            //     minTemp: 1,
+            //     percipitation: 1,
+            //     humidity: 1,
+            //     wind: 1,
+            //     localTime: 1,
+            //   }
     
             return data;
         } catch (e) {

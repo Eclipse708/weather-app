@@ -18,6 +18,10 @@ const uiController = () => {
     const wind = document.createElement('p');
     const extraInfoDiv = document.querySelector('.extra-info');
     
+    const changeTempUnit = (temp) => {
+      const tempInCelsius = Math.round((temp - 32) * 5/9);
+      return tempInCelsius;
+    }
 
     const render = (data) => {
 
@@ -26,19 +30,22 @@ const uiController = () => {
         locationName.textContent = data.location;
         
         localTime.id = 'local-time';
-        localTime.textContent = `Local Time: ${data.localTime}`;
+        localTime.textContent = `Description: ${data.localTime}`;
 
         locationDiv.appendChild(locationName);
         locationDiv.appendChild(localTime);
 
         currentTemp.id = 'location-temperature';
-        currentTemp.textContent = `Current Temp: ${data.currentTemp}`;
+        const currentTempInCel = changeTempUnit(data.currentTemp);
+        currentTemp.textContent = `Current Temp: ${currentTempInCel}`;
 
         maxTemp.id = 'max-temp';
-        maxTemp.textContent = `Max Temp: ${data.maxTemp}`;
+        const maxTempInCel = changeTempUnit(data.maxTemp);
+        maxTemp.textContent = `Max Temp: ${maxTempInCel}`;
 
         minTemp.id = 'min-temp';
-        minTemp.textContent = `Min Temp: ${data.minTemp}`;
+        const minTempInCel = changeTempUnit(data.minTemp);
+        minTemp.textContent = `Min Temp: ${minTempInCel}`;
 
         temperatureDiv.appendChild(currentTemp);
         temperatureDiv.appendChild(maxTemp);
@@ -74,7 +81,7 @@ const uiController = () => {
           }
         }
       }
-      
+
       const addLocationListener = () => {
           form.addEventListener('submit', (event) => {
             event.preventDefault();
