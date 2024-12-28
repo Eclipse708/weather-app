@@ -1,19 +1,21 @@
 import apiManager from "./apiModule";
 
 const uiController = () => {
-    const title = document.querySelector('.title-section');
-    const form = document.getElementById('loc-form');
-    const error = document.getElementById('error');
-    const inputs = document.querySelectorAll('input');
-    const locationName = document.createElement('h1');
-    const locationDescription = document.createElement('p');
-    const currentTemp = document.createElement('p');
-    const maxTemp = document.createElement('p');
-    const minTemp = document.createElement('p');
-    const temperatureDiv = document.querySelector('.current-weather .temperature');
-    const forecast = document.querySelector('.upcoming-weather .forecast');
-    const precipitation = document.createElement('p');
-    const humidity = document.createElement('p');
+  const locationName = document.createElement('h1');
+  const locationDescription = document.createElement('p');
+  const currentTemp = document.createElement('p');
+  const maxTemp = document.createElement('p');
+  const minTemp = document.createElement('p');
+  const precipitation = document.createElement('p');
+  const tempInfo = document.createElement('div');
+  const weatherInfo = document.createElement('div');
+  const form = document.getElementById('loc-form');
+  const error = document.getElementById('error');
+  const inputs = document.querySelectorAll('input');
+  const humidity = document.createElement('p');
+  const title = document.querySelector('.title-section');
+  const temperatureDiv = document.querySelector('.current-weather .temperature');
+  const forecast = document.querySelector('.upcoming-weather .forecast');
     
     const changeTempUnit = (temp) => {
       const tempInCelsius = Math.round((temp - 32) * 5/9);
@@ -46,7 +48,7 @@ const uiController = () => {
     }
 
     const extractImage = (conditions) => {
-      console.log(conditions);
+      // console.log(conditions);
 
       if (conditions === 'Partially cloudy') {
         return 'partly_cloudy_day';
@@ -58,10 +60,10 @@ const uiController = () => {
         return 'rainy';
       } else if (conditions === 'Rain') {
         return 'rainy_heavy';
-      } else if (conditions === 'Snow') {
-        return 'snowing';
       } else if (conditions === 'Clear') {
         return 'clear_day';
+      } else if (conditions.includes('Snow')) {
+        return 'snowing';
       }
     }
 
@@ -72,7 +74,7 @@ const uiController = () => {
           if (index === 0) {
             return;
           } else if (index < 8) {
-          console.log(index, day);
+          // console.log(index, day);
           // console.log(day.datetime);
 
           const weatherIcon = document.createElement('span');
@@ -86,7 +88,7 @@ const uiController = () => {
           const extractedDay = extractDays(day.datetime);
           const extractedImage = extractImage(day.conditions);
           weatherIcon.textContent = extractedImage;
-          forecastTemp.textContent = `${extractedDay}: ${forecastTempInCelsius}°C`;
+          forecastTemp.textContent = `${extractedDay} ${forecastTempInCelsius}°C`;
 
           dayDiv.appendChild(forecastTemp);
           dayDiv.appendChild(weatherIcon);
@@ -108,10 +110,20 @@ const uiController = () => {
       title.appendChild(locationDescription);
   
       temperatureDiv.innerHTML = '';
+      tempInfo.innerHTML = '';
+
+      tempInfo.classList.add('temp-info');
+      weatherInfo.classList.add('weather-info');
   
       currentTemp.id = 'location-temperature';
       const currentTempInCel = changeTempUnit(data.currentTemp);
-      currentTemp.textContent = `Current Temp: ${currentTempInCel}°C`;
+      currentTemp.textContent = `${currentTempInCel}°C`;
+
+      const weatherIcon = document.createElement('span');
+      weatherIcon.classList.add('material-symbols-outlined', 'weather-icon');
+
+      const extractedIcon = extractImage(data.days[0].conditions);
+      weatherIcon.textContent = extractedIcon;
   
       maxTemp.id = 'max-temp';
       const maxTempInCel = changeTempUnit(data.maxTemp);
@@ -124,12 +136,14 @@ const uiController = () => {
       precipitation.textContent = `Precipitation: ${data.percipitation}%`;
       humidity.textContent = `Humidity ${data.humidity}%`;
 
-      
-      temperatureDiv.appendChild(currentTemp);
-      temperatureDiv.appendChild(maxTemp);
-      temperatureDiv.appendChild(minTemp);
-      temperatureDiv.appendChild(precipitation);
-      temperatureDiv.appendChild(humidity);
+      tempInfo.appendChild(currentTemp);
+      tempInfo.appendChild(weatherIcon);
+      temperatureDiv.appendChild(tempInfo);
+      weatherInfo.appendChild(maxTemp);
+      weatherInfo.appendChild(minTemp);
+      weatherInfo.appendChild(precipitation);
+      weatherInfo.appendChild(humidity);
+      temperatureDiv.appendChild(weatherInfo);
   
       // renders 7 days forecast
       renderDays(data.days);

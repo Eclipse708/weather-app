@@ -1,12 +1,13 @@
 :root {
   --primary-bg-color: #f0f4f8;
-  --bg-gray: #DDD;
+  --color-gray: #e9e9ed;
+  --color-black: #000000;
   --primary-text-color: #333;
   --secondary-text-color: #555;
   --input-bg-color: #fff;
-  --button-bg-color: #007BFF;
-  --button-text-color: #fff;
+  --button-text-color: #000000;
   --error-color: #ff4d4f;
+  --shadow:rgba(0, 0, 0, 0.16) 0px 1px 4px 0px; 
 }
 
 body {
@@ -29,12 +30,21 @@ body {
   'opsz' 24
 }
 
-.navbar {
+.header {
   width: 100%;
-  background-color: var(--bg-gray);
-  padding: 10px 20px;
+  box-shadow: var(--shadow);
+}
+
+.header .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar {
+  max-width: 1200px;
+  padding: 10px 20px;
+  margin: 0 auto;
 }
 
 .location-form {
@@ -54,12 +64,19 @@ body {
 
 button {
   padding: 10px 20px;
-  background-color: var(--button-bg-color);
+  background-color: var(--color-gray);
   color: var(--button-text-color);
+  transition: filter 0.15s ease-in-out;
+  font-weight: 600;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+}
+
+button:hover {
+  cursor: pointer;
+  filter: brightness(90%);
 }
 
 #error {
@@ -117,13 +134,55 @@ button {
   color: var(--primary-text-color);
 }
 
-.temperature, .forecast {
+.temperature {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.forecast {
+  display: flex;
+  flex-direction: row;
   gap: 10px;
 }
 
 .temperature p,
 .forecast p {
   margin: 0;
+}
+
+.temperature {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.temp-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weather-icon {
+  font-size: 50px;
+  color: var(--color-black);
+}
+
+#location-temperature {
+  font-size: 24px;
+  color: var(--primary-text-color);
+}
+
+.weather-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px; /* Add some gap between weather details */
+}
+
+.weather-info p {
+  flex: 1 1 45%; /* Each weather detail takes up roughly half the width */
+  font-size: 16px;
+  color: var(--secondary-text-color);
 }
