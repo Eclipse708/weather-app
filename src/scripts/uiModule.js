@@ -16,6 +16,7 @@ const uiController = () => {
   const title = document.querySelector('.title-section');
   const temperatureDiv = document.querySelector('.current-weather .temperature');
   const forecast = document.querySelector('.upcoming-weather .forecast');
+  const loader = document.getElementById('loader');
     
     const changeTempUnit = (temp) => {
       const tempInCelsius = Math.round((temp - 32) * 5/9);
@@ -78,7 +79,7 @@ const uiController = () => {
           // console.log(day.datetime);
 
           const weatherIcon = document.createElement('span');
-          weatherIcon.classList.add('material-symbols-outlined');
+          weatherIcon.classList.add('material-symbols-outlined', 'forecast-icon');
 
           const dayDiv = document.createElement('div');
           const forecastTemp = document.createElement('p');
@@ -104,7 +105,7 @@ const uiController = () => {
       locationName.textContent = data.location;
   
       locationDescription.id = 'location-description'
-      locationDescription.textContent = `Description: ${data.description}`;
+      locationDescription.textContent = `${data.description}`;
 
       title.appendChild(locationName);
       title.appendChild(locationDescription);
@@ -127,14 +128,14 @@ const uiController = () => {
   
       maxTemp.id = 'max-temp';
       const maxTempInCel = changeTempUnit(data.maxTemp);
-      maxTemp.textContent = `Max Temp: ${maxTempInCel}°C`;
+      maxTemp.textContent = `Max: ${maxTempInCel}°C`;
   
       minTemp.id = 'min-temp';
       const minTempInCel = changeTempUnit(data.minTemp);
-      minTemp.textContent = `Min Temp: ${minTempInCel}°C`;
+      minTemp.textContent = `Min: ${minTempInCel}°C`;
   
-      precipitation.textContent = `Precipitation: ${data.percipitation}%`;
-      humidity.textContent = `Humidity ${data.humidity}%`;
+      precipitation.textContent = `Rain: ${data.percipitation}%`;
+      humidity.textContent = `Humid: ${data.humidity}%`;
 
       tempInfo.appendChild(currentTemp);
       tempInfo.appendChild(weatherIcon);
@@ -150,8 +151,8 @@ const uiController = () => {
   };
   
 
-    const errorValidation = (inputName) => {
-        if (inputName.value.length === 0) {
+    const errorValidation = (inputName, e = 0) => {
+        if (e || inputName.value.length === 0 ) {
           console.log(`${inputName} is empty`);
           
           if (inputName.name === 'cName') {
@@ -172,16 +173,19 @@ const uiController = () => {
             event.preventDefault();
             const formData = new FormData(form);
             const cityName = formData.get('cName');
-            // form.reset();
             console.log(cityName);
             inputs.forEach(input => errorValidation(input));
+            form.reset();
             if (cityName) {
-              console.log(`city name entered successfully ${cityName}`);
+              loader.classList.remove('invisible');
               apiManager().fetchWeather(cityName)
               .then(response => {
+                loader.classList.add('invisible');          
                 render(response); 
+            }).catch(e => {
+              inputs.forEach(input => errorValidation(input, e));
+              console.log(e);
             });
-              
             } else {
               console.log('Please enter a city name');
             }
@@ -189,8 +193,10 @@ const uiController = () => {
       }
 
     const preview = () => {
+      loader.classList.remove('invisible');
       apiManager().fetchWeather('london')
       .then(response => {
+        loader.classList.add('invisible');  
         render(response);
       });
     }
